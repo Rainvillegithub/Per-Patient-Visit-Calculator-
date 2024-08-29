@@ -1,0 +1,43 @@
+<form id="billingsCalculator">
+  <label for="totalBillings">Total Weekly Billings ($):</label>
+  <input type="number" id="totalBillings" name="totalBillings" value="0"><br>
+
+  <label for="numberPatients">Number of Patients Seen:</label>
+  <input type="number" id="numberPatients" name="numberPatients" value="0"><br>
+
+  <button type="button" onclick="calculateBillingsPerPatient()">Calculate</button>
+</form>
+
+<p id="result"></p>
+
+<script>
+  function calculateBillingsPerPatient() {
+    const totalBillings = parseFloat(document.getElementById('totalBillings').value) || 0;
+    const numberPatients = parseFloat(document.getElementById('numberPatients').value) || 0;
+
+    if (numberPatients > 0) {
+      const billingsPerPatient = totalBillings / numberPatients;
+      let feedback = '';
+
+      if (billingsPerPatient >= 70 && billingsPerPatient < 90) {
+        feedback = 'Heavy footcare practice. Consider diversifying services.';
+      } else if (billingsPerPatient >= 90 && billingsPerPatient < 110) {
+        feedback = 'Could benefit from increasing surgery and MSK visits.';
+      } else if (billingsPerPatient >= 110 && billingsPerPatient < 130) {
+        feedback = 'Better balance in treatment offerings; more efficient and profitable.';
+      } else if (billingsPerPatient >= 130 && billingsPerPatient < 150) {
+        feedback = 'Ideal billings; thriving practice. Focus on maximizing profitability and patient experience.';
+      } else if (billingsPerPatient >= 150) {
+        feedback = 'Amazing average! Keep it up and consider expanding if desired.';
+      } else {
+        feedback = 'Billings per patient are below $70. Consider evaluating service offerings.';
+      }
+
+      document.getElementById('result').innerText = `Billings Per Patient: $${billingsPerPatient.toFixed(2)}\nFeedback: ${feedback}`;
+    } else {
+      document.getElementById('result').innerText = `Please enter a valid number of patients.`;
+    }
+  }
+</script>
+<h1>👋 Enhance Your Practice👋
+</h1> 👋Enrich Your Life👋
