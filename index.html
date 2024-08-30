@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weekly Billing Calculator</title>
+    <title>Weekly Billing Health Check</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -70,23 +70,19 @@
 </head>
 <body>
 
-    <h1>Weekly Billing Calculator</h1>
+    <h1>Weekly Billing Health Check</h1>
 
     <div class="calculator">
-        <label for="totalBillings">Total Weekly Billings ($):</label>
-        <input type="number" id="totalBillings" placeholder="Enter total weekly billings" min="0">
+        <label for="totalBillings">Total Clinic Weekly Billings ($):</label>
+        <input type="number" id="totalBillings" placeholder="Enter total clinic weekly billings" min="0">
 
-        <label for="totalPatients">Number of Patients Seen Per Week:</label>
-        <input type="number" id="totalPatients" placeholder="Enter number of patients seen per week" min="0">
-
-        <label for="totalHours">Number of Hours Worked Per Week:</label>
-        <input type="number" id="totalHours" placeholder="Enter number of hours worked per week" min="0">
+        <label for="totalVisits">Number of Visits Per Week:</label>
+        <input type="number" id="totalVisits" placeholder="Enter number of visits per week" min="0">
 
         <button onclick="calculate()">Calculate</button>
 
         <div id="result">
-            <p id="perPatientBilling"></p>
-            <p id="hourlyBilling"></p>
+            <p id="perVisitBilling"></p>
             <p id="reportText"></p>
         </div>
     </div>
@@ -99,34 +95,25 @@
     <script>
     function calculate() {
         var totalBillings = parseFloat(document.getElementById('totalBillings').value);
-        var totalPatients = parseInt(document.getElementById('totalPatients').value);
-        var totalHours = parseInt(document.getElementById('totalHours').value);
+        var totalVisits = parseInt(document.getElementById('totalVisits').value);
 
-        if (totalBillings > 0 && totalPatients > 0 && totalHours > 0) {
-            var perPatientBilling = totalBillings / totalPatients;
-            var hourlyBilling = totalBillings / totalHours;
+        if (totalBillings > 0 && totalVisits > 0) {
+            var perVisitBilling = totalBillings / totalVisits;
 
-            document.getElementById('perPatientBilling').innerText = "Per Patient Billing Average: $" + perPatientBilling.toFixed(2);
-            document.getElementById('hourlyBilling').innerText = "Average Hourly Billings: $" + hourlyBilling.toFixed(2);
+            document.getElementById('perVisitBilling').innerText = "Per Visit Billing Average: $" + perVisitBilling.toFixed(2);
 
             var reportText = "Based on your current numbers:\n";
 
-            if (perPatientBilling < 90) {
-                reportText += "Your Per Patient Billing Average indicates a heavy focus on routine foot care. Consider diversifying your services to include higher-value treatments like surgeries or MSK visits to increase profitability.\n";
-            } else if (perPatientBilling >= 90 && perPatientBilling < 110) {
+            if (perVisitBilling < 90) {
+                reportText += "Your Per Visit Billing Average indicates a heavy focus on routine foot care. Consider diversifying your services to include higher-value treatments like surgeries or MSK visits to increase profitability.\n";
+            } else if (perVisitBilling >= 90 && perVisitBilling < 110) {
                 reportText += "Your practice could benefit from increasing the number of higher-value procedures, such as surgeries or MSK treatments, to better balance your treatment offerings and boost revenue.\n";
-            } else if (perPatientBilling >= 110 && perPatientBilling < 130) {
+            } else if (perVisitBilling >= 110 && perVisitBilling < 130) {
                 reportText += "Your practice is well-balanced with a mix of routine and specialized services, leading to good profitability. Continue optimizing your operations to maintain this balance.\n";
-            } else if (perPatientBilling >= 130 && perPatientBilling < 150) {
+            } else if (perVisitBilling >= 130 && perVisitBilling < 150) {
                 reportText += "Your practice is thriving with a strong mix of high-value services. Keep focusing on enhancing patient satisfaction and optimizing your operations for maximum profitability.\n";
             } else {
-                reportText += "You're doing exceptionally well with a high Per Patient Billing Average. Consider expanding your practice or services if that aligns with your goals.\n";
-            }
-
-            if (hourlyBilling < 100) {
-                reportText += "Your Average Hourly Billings suggest there may be room to improve your operational efficiency. Focus on increasing the value of each patient visit or optimizing your schedule to make the most of your time.";
-            } else {
-                reportText += "Your Average Hourly Billings indicate that you're making effective use of your time, translating hours worked into strong revenue. Keep up the great work!";
+                reportText += "You're doing exceptionally well with a high Per Visit Billing Average. Consider expanding your practice or services if that aligns with your goals.\n";
             }
 
             document.getElementById('reportText').innerText = reportText;
@@ -138,7 +125,7 @@
             ctaText += "We can help you enhance your practice, boost profitability, and enrich your professional life.";
             document.querySelector('.cta').innerHTML = `<p>👋 Enhance Your Practice👋</p><p>${ctaText}</p><p>👋 Enrich Your Life👋</p>`;
         } else {
-            alert("Please enter valid numbers for total weekly billings, number of patients, and number of hours worked.");
+            alert("Please enter valid numbers for total clinic weekly billings and number of visits per week.");
         }
     }
     </script>
