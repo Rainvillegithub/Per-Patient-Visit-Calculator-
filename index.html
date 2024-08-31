@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Provider Billing and Pay Comparison</title>
+    <title>Per Patient Visit Calculator</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -57,79 +57,76 @@
             font-size: 18px;
             display: none;
         }
+        .cta {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8d7da;
+            border-left: 5px solid #dc3545;
+            border-radius: 5px;
+            font-size: 16px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
 
-    <h1>Provider Billing and Pay Comparison</h1>
+    <h1>Per Patient Visit Calculator</h1>
 
     <div class="calculator">
-        <form id="payCalculator">
-            <label for="weeklyBillings">Gross Weekly Billings ($):</label>
-            <input type="number" id="weeklyBillings" name="weeklyBillings" value="0">
+        <label for="totalBillings">Total Clinic Weekly Billings ($):</label>
+        <input type="number" id="totalBillings" placeholder="Enter total weekly billings" min="0">
 
-            <label for="workingHours">Weekly Working Hours:</label>
-            <input type="number" id="workingHours" name="workingHours" value="0">
+        <label for="totalVisits">Number of Visits Per Week:</label>
+        <input type="number" id="totalVisits" placeholder="Enter number of visits per week" min="0">
 
-            <label for="hourlyRate">Current Hourly Rate ($):</label>
-            <input type="number" id="hourlyRate" name="hourlyRate" value="0">
+        <button onclick="calculate()">Calculate</button>
 
-            <label for="vacationPay">Vacation Pay (%):</label>
-            <input type="number" id="vacationPay" name="vacationPay" value="0">
-
-            <button type="button" onclick="calculatePay()">Calculate</button>
-        </form>
+        <div id="result">
+            <p id="perPatientBilling"></p>
+            <p id="reportText"></p>
+        </div>
     </div>
 
-    <div id="result">
-        <p id="payResult"></p>
-        <p id="explanation"></p>
-        <p id="callToAction"></p>
+    <div class="cta">
+        <p>👋 Enhance Your Practice👋</p>
+        <p>👋 Enrich Your Life👋</p>
     </div>
 
     <script>
-    function calculatePay() {
-        const weeklyBillings = parseFloat(document.getElementById('weeklyBillings').value) || 0;
-        const workingHours = parseFloat(document.getElementById('workingHours').value) || 0;
-        const hourlyRate = parseFloat(document.getElementById('hourlyRate').value) || 0;
-        const vacationPay = parseFloat(document.getElementById('vacationPay').value) / 100 || 0;
+    function calculate() {
+        var totalBillings = parseFloat(document.getElementById('totalBillings').value);
+        var totalVisits = parseInt(document.getElementById('totalVisits').value);
 
-        if (workingHours <= 0) {
-            alert("Please enter a valid number of working hours.");
-            return;
-        }
+        if (totalBillings > 0 && totalVisits > 0) {
+            var perPatientBilling = totalBillings / totalVisits;
 
-        const grossHourlyBilling = weeklyBillings / workingHours;
-        const totalHourlyCompensation = hourlyRate + (hourlyRate * vacationPay);
-        const targetHourlyBilling = totalHourlyCompensation * 3;
+            document.getElementById('perPatientBilling').innerText = "Per Patient Billing Average: $" + perPatientBilling.toFixed(2);
 
-        let result = '';
-        let explanation = '';
+            var reportText = "Based on your current numbers:\n";
 
-        // Generating the result
-        if (grossHourlyBilling < targetHourlyBilling) {
-            const shortfall = targetHourlyBilling - grossHourlyBilling;
-            result = `Shortfall: $${shortfall.toFixed(2)} per hour. The provider is not meeting the target of generating 3 times their pay per hour.`;
+            if (perPatientBilling < 90) {
+                reportText += "Your Per Patient Billing Average indicates a heavy focus on routine foot care. Consider diversifying your services to include higher-value treatments like surgeries or MSK visits to increase profitability.\n";
+            } else if (perPatientBilling >= 90 && perPatientBilling < 110) {
+                reportText += "Your practice could benefit from increasing the number of higher-value procedures, such as surgeries or MSK treatments, to better balance your treatment offerings and boost revenue.\n";
+            } else if (perPatientBilling >= 110 && perPatientBilling < 130) {
+                reportText += "Your practice is well-balanced with a mix of routine and specialized services, leading to good profitability. Continue optimizing your operations to maintain this balance.\n";
+            } else if (perPatientBilling >= 130 && perPatientBilling < 150) {
+                reportText += "Your practice is thriving with a strong mix of high-value services. Keep focusing on enhancing patient satisfaction and optimizing your operations for maximum profitability.\n";
+            } else {
+                reportText += "You're doing exceptionally well with a high Per Patient Billing Average. Consider expanding your practice or services if that aligns with your goals.\n";
+            }
+
+            document.getElementById('reportText').innerText = reportText;
+            document.getElementById('result').style.display = 'block';
+
+            // Call to action
+            var ctaText = "Looking to optimize your practice further? ";
+            ctaText += "Contact us today for a personalized consultation. ";
+            ctaText += "We can help you enhance your practice, boost profitability, and enrich your professional life.";
+            document.querySelector('.cta').innerHTML = `<p>👋 Enhance Your Practice👋</p><p>${ctaText}</p><p>👋 Enrich Your Life👋</p>`;
         } else {
-            const surplus = grossHourlyBilling - targetHourlyBilling;
-            result = `Surplus: $${surplus.toFixed(2)} per hour. The provider is exceeding the target of generating 3 times their pay per hour.`;
+            alert("Please enter valid numbers for total weekly billings and number of visits.");
         }
-
-        // Generating the explanation
-        explanation += `<strong>Gross Hourly Billing:</strong> The provider generates $${grossHourlyBilling.toFixed(2)} per hour based on weekly billings divided by hours worked.<br>`;
-        explanation += `<strong>Total Hourly Compensation:</strong> The provider's current hourly rate plus vacation pay totals $${totalHourlyCompensation.toFixed(2)} per hour.<br>`;
-        explanation += `<strong>Target Hourly Billing:</strong> To meet the target of generating 3 times the pay, the provider should bill $${targetHourlyBilling.toFixed(2)} per hour.<br>`;
-
-        // Generating the call to action
-        let callToAction = "If you're finding that your current billing structure falls short of the target, ";
-        callToAction += "or if you want to explore ways to improve profitability and compensation, ";
-        callToAction += "contact us today for a personalized consultation. We're here to help you achieve your business goals.";
-
-        // Displaying the results, explanation, and call to action
-        document.getElementById('payResult').innerHTML = result;
-        document.getElementById('explanation').innerHTML = explanation;
-        document.getElementById('callToAction').innerHTML = callToAction;
-        document.getElementById('result').style.display = 'block';
     }
     </script>
 
